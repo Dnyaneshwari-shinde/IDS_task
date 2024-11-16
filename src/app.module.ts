@@ -17,37 +17,11 @@ import * as mongoose from 'mongoose';
       debug: process.env.NODE_ENV !== 'production',
       typePaths: ['./**/*.graphql'],
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/IDS_task'),
+    MongooseModule.forRoot('mongodb://0.0.0.0:27017/task_db'),
     UserModule,
     BlogModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
 })
-export class AppModule implements OnModuleInit {
-  private readonly logger = new Logger(AppModule.name);
-
-  async onModuleInit() {
-    this.logger.log('Initializing MongoDB connection check...');
-
-    // Directly check if the connection is open
-    if (mongoose.connection.readyState === 1) {
-      this.logger.log('MongoDB connection established successfully!');
-    } else {
-      this.logger.error('MongoDB connection failed ohh shut!');
-    }
-
-    // Set up Mongoose events
-    mongoose.connection.on('connected', () => {
-      this.logger.log('MongoDB connection established successfully!');
-    });
-
-    mongoose.connection.on('error', (err) => {
-      this.logger.error('MongoDB connection error:', err);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-      this.logger.warn('MongoDB connection disconnected!');
-    });
-  }
-}
+export class AppModule {}

@@ -13,17 +13,18 @@ input CreateBlogInput {
 }
 
 input UpdateBlogInput {
+  id: String!
   title: String 
   content: String
 }
 
 type Query {
-  blog: [Blog]!
-  getBlog : Blog
+  getBlogById(id: String!): Blog
+  getAllBlogs : [Blog]!
 }
 
 type Mutation {
   createBlog(createBlogInput: CreateBlogInput!): Blog!
   updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
-  removeBlog(id: Int!): Blog
+  removeBlog(id: ID!): Blog 
 }
