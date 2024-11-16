@@ -1,40 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreateUserInput } from './dto/create-user.input'; 
+import { CheckUserInput } from './dto/check-user.input';
 import { JwtService } from '@nestjs/jwt';
+import { User, UserDocument } from './schema/user.schema';
+
 @Injectable()
 export class UserService {
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private jwtService: JwtService
+  ) {}
 
-
-  constructor ( private jwtService : JwtService)  {}
-  
-  create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+  // Register
+  async create(createUserInput: CreateUserInput): Promise<User> {  
+    const newUser = new this.userModel(createUserInput);
+    const record = await newUser.save();
+    return record;
   }
 
-  findAll() {
-    return {
-      id: 101, 
-      username: "Dnyanu",
-      email: "ds123@gmail.com",
-      password: "dnyanu123",
-      role: "Developer"
+  // Login
+  async findOne(CheckUserInput : CheckUserInput): Promise<{ accessToken: string }> {
+    console.log("data", CheckUserInput);
+    const user = await this.userModel.findOne({email : CheckUserInput.email, password : CheckUserInput.password});
+    if (!user) {
+      throw new Error('User not found');
     }
-  }
+    // Generate JWT token
+    const payload = { email: user.email, sub: user._id }; // Create the payload
+    const accessToken = this.jwtService.sign(payload);  // Sign the token with the payload
 
-  newToken() {
-    return this.jwtService.signAsync({username: "Dnyanu"})
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    return { accessToken };
   }
 }

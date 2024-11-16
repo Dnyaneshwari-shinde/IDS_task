@@ -5,7 +5,7 @@ import { Document } from 'mongoose';
 export type BlogDocument = Blog & Document;
 
 @ObjectType()
-@Schema({ collection: 'blog' }) // Explicitly set the collection name here
+@Schema({ collection: 'blog' })
 export class Blog {
   @Field(() => ID)
   _id: string;
