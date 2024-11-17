@@ -1,6 +1,7 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { AuthorInput } from '../dto/create-blog.input'; 
 
 export type BlogDocument = Blog & Document;
 
@@ -18,9 +19,9 @@ export class Blog {
   @Prop({ required: true })
   content: string;
 
-  @Field()
-  @Prop()
-  author: string;
+  @Field(() => AuthorInput)  
+  @Prop({ type: AuthorInput })  
+  author: AuthorInput;
 
   @Field()
   @Prop({ default: Date.now })
@@ -31,4 +32,12 @@ export class Blog {
   updatedAt: Date;
 }
 
+@ObjectType()
+export class BlogPagination {
+  @Field(() => [Blog])
+  blogs: Blog[];
+
+  @Field(() => Int)
+  totalCount: number;
+}
 export const BlogSchema = SchemaFactory.createForClass(Blog);

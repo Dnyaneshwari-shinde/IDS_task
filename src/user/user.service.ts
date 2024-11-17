@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserInput } from './dto/create-user.input'; 
 import { CheckUserInput } from './dto/check-user.input';
+import { GetUserInput } from "./dto/get-user.input";
 import { JwtService } from '@nestjs/jwt';
 import { User, UserDocument } from './schema/user.schema';
 
@@ -32,5 +33,14 @@ export class UserService {
     const accessToken = this.jwtService.sign(payload);  // Sign the token with the payload
 
     return { accessToken };
+  }
+
+  // query user details
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userModel.findOne({ email }).exec();
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
   }
 }

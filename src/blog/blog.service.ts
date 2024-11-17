@@ -7,6 +7,9 @@ import { Blog, BlogDocument } from './schema/blog.schema';
 
 @Injectable()
 export class BlogService {
+  findById(id: string) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectModel(Blog.name) private readonly blogModel: Model<BlogDocument>,
   ) {}
@@ -29,7 +32,7 @@ export class BlogService {
 
   // Fetch a single blog by ID
   async findOne(id: string): Promise<Blog> {
-    const blog = await this.blogModel.findById(id).exec();
+    const blog = await this.blogModel.findById(id).populate('author').exec();
     if (!blog) {
       throw new NotFoundException(`Blog with ID ${id} not found`);
     }
@@ -57,4 +60,11 @@ export class BlogService {
     return deletedBlog;
   }
   
+
+  async getAllBlogs(filter?: Record<string, any>, limit?: number, offset?: number): Promise<{ blogs: Blog[]; totalCount: number }> {
+    const query = filter || {};
+    const blogs = await this.blogModel.find(query).skip(offset || 0).limit(limit || 10).exec();
+    const totalCount = await this.blogModel.countDocuments(query).exec();
+    return { blogs, totalCount };
+  }
 }

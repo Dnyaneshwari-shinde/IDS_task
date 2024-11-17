@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Role } from '../../auth/enums/role.enums';
 
 export type UserDocument = User & Document;
 
@@ -15,16 +16,16 @@ export class User {
   username: string; 
 
   @Field()
-  @Prop({ required: true, unique: true }) // Make email unique
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Field()
   @Prop({ required: true })
   password: string; 
 
-  @Field()
-  @Prop()
-  role: string; 
+  @Field(() => Role)
+  @Prop({ required: true, enum: Role, type: String })
+  role: Role;
 
   @Field(() => Date)
   @Prop({ default: Date.now }) // Set default to current time

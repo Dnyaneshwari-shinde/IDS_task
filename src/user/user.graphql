@@ -1,5 +1,6 @@
+
 type User {
-  id: ID! 
+  id: String! 
   username: String! 
   email: String! 
   password: String! 
@@ -10,6 +11,7 @@ input CreateUserInput {
   username: String! 
   email: String! 
   password: String! 
+  role: String!
 }
 
 input CheckUserInput { 
@@ -17,8 +19,13 @@ input CheckUserInput {
   password: String! 
 }
 
+input GetUserInput {
+  email: String!
+}
+
 type Query {
-  generateToken : String
+  generateToken: String
+  findOneUser(GetUserInput: GetUserInput!): User!
 }
 
 type LoginResponse {
