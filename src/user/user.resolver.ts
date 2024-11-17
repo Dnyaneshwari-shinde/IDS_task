@@ -24,10 +24,10 @@ export class UserResolver {
   //   return this.userService.findAll();
   // }
 
-  // @Query('generateToken')
-  // getToken()  {
-  //   return this.userService.newToken();
-  // }
+  @Query('generateToken')
+  getToken()  {
+    return this.userService.newToken();
+  }
 
   @Mutation(() => LoginResponse) 
   async login(@Args('CheckUserInput') CheckUserInput: CheckUserInput): Promise<{ accessToken: string }> {

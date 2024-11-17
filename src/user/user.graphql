@@ -1,16 +1,16 @@
 
 type User {
-  id: String! 
-  username: String! 
-  email: String! 
-  password: String! 
+  id: String
+  username: String
+  email: String
+  password: String
   role: String
 }
 
 input CreateUserInput {
   username: String! 
   email: String! 
-  password: String! 
+  password: String!
   role: String!
 }
 

@@ -9,6 +9,9 @@ import { User, UserDocument } from './schema/user.schema';
 
 @Injectable()
 export class UserService {
+  login(login: any) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private jwtService: JwtService
@@ -29,8 +32,8 @@ export class UserService {
       throw new Error('User not found');
     }
     // Generate JWT token
-    const payload = { email: user.email, sub: user._id }; // Create the payload
-    const accessToken = this.jwtService.sign(payload);  // Sign the token with the payload
+    const payload = { email: user.email, sub: user._id }; 
+    const accessToken = this.jwtService.sign(payload);  
 
     return { accessToken };
   }
@@ -42,5 +45,12 @@ export class UserService {
       throw new Error('User not found');
     }
     return user;
+  }
+
+  async newToken (): Promise<string> {
+    const payload = "hithisdata";
+    const accessToken = this.jwtService.sign(payload);  
+
+    return  accessToken;
   }
 }
