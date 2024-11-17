@@ -1,6 +1,6 @@
-#Blog Management System with Nest.js and GraphQL
+# Blog Management System with Nest.js and GraphQL
 
-#User Features
+# User Features
 1. Registration: Create a new user account.
 2. Login: Authenticate users and provide JWT tokens.
 3. User Roles: Role-based access control (Admin/User).
